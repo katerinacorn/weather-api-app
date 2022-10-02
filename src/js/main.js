@@ -23,6 +23,14 @@ const formatDate = () => {
   return `${day}, ${hours}:${minutes}`;
 };
 
+const formatDay = (timestamp) => {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
+
 //get API data
 const axios = require("axios").default;
 let units = "metric";
@@ -49,19 +57,27 @@ const getWeatherData = () => {
   axios.get(URL).then(showCityWheather);
 };
 
+const getForecastData = (coordinates) => {
+  const URL = `${BASE_URL}/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${KEY}&units=${units}`;
+  axios.get(URL).then(displayForecast);
+};
 
-//TODO display weather + refact
+
+//display weather
 const header = document.querySelector(".card__header-location");
 const searchInputData = document.getElementById("search");
 const searchForm = document.getElementById("search-form");
-let convertedTemperature;
 const weatherStatusElement = document.querySelector(".status");
-/* const weatherDescriptionElement = document.querySelector(".weather__description"); */
 const weatherWindElement = document.querySelector(".weather__wind");
-
 const humidityElement = document.getElementById("humidity");
 const iconElement = document.getElementById("icon");
 const currentHeading = document.querySelector(".heading");
+const temperatureElement = document.getElementById("temperature");
+const celsius = document.getElementById("celsius");
+const fahrenheit = document.getElementById("fahrenheit");
+const currentLocationBtn = document.getElementById("localisation-btn");
+const forecastContainer = document.getElementById("forecast");
+let convertedTemperature;
 
 const showCityWheather = (response) => {
   const {
@@ -78,17 +94,15 @@ const showCityWheather = (response) => {
     wind: {
       speed: windSpeed,
     },
-    coord: {
-      lon: longitude,
-      lat: latitude
-    },
+    coord: coordinates,
   } = response.data;
 
 
   convertedTemperature = Math.round(temperature);
   //display
-  header.textContent = cityName;
-  currentHeading.textContent = formatDate();
+  header.textContent = formatDate();
+  currentHeading.textContent = `${cityName} today:`;
+
   //*
   iconElement.setAttribute(
     "src",
@@ -100,13 +114,11 @@ const showCityWheather = (response) => {
 
   weatherWindElement.textContent = `Wind speed: ${windSpeed} m/sec`;
   humidityElement.textContent = `Humidity: ${humidity} %`;
+
+  getForecastData(coordinates);
 };
 
-//TODO refact unit conversion
-let temperatureElement = document.getElementById("temperature");
-let celsius = document.getElementById("celsius");
-let fahrenheit = document.getElementById("fahrenheit");
-
+//unit conversion
 celsius.addEventListener("click", event => {
   event.preventDefault();
   let celsiusTemp = Math.round(convertedTemperature);
@@ -124,10 +136,11 @@ fahrenheit.addEventListener("click", event => {
 });
 
 //local weather
-const currentLocationBtn = document.getElementById("localisation-btn");
-
 currentLocationBtn.addEventListener("click", event => {
   event.preventDefault();
+  while (forecastContainer.firstChild) {
+    forecastContainer.removeChild(forecastContainer.firstChild);
+  }
   getWeatherData();
 });
 
@@ -140,8 +153,47 @@ const formHandler = (form) => {
       alert("Enter a city name, please😊");
       return;
     }
+    while (forecastContainer.firstChild) {
+      forecastContainer.removeChild(forecastContainer.firstChild);
+    }
 
     search(searchInputData.value);
+
+  });
+};
+
+//forecast
+const displayForecast = (response) => {
+  const forecast = response.data.daily;
+
+  forecast.forEach((day, index) => {
+    const forecastElement = document.createElement("div");
+    forecastElement.setAttribute("class", "day");
+
+    if (index < 6) {
+      forecastElement.innerHTML = `
+      <p class="day__title">${formatDay(day.dt)}</p>
+      <img class="day__icon" src="http://openweathermap.org/img/wn/${
+        day.weather[0].icon
+      }@2x.png"
+      alt="${day.weather[0].description}"/>
+    <p class="status">
+    ${day.weather[0].main}
+    </p>
+    <p class="day-details">
+      <span class="day-details_max">
+      ${Math.round(
+        day.temp.max)}º
+      </span>
+      <span class="day-details_min">
+      ${Math.round(
+        day.temp.min)}º
+      </span>
+    </p>
+    `;
+
+      forecastContainer.appendChild(forecastElement);
+    }
   });
 };
 

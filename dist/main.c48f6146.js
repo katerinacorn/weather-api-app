@@ -124,7 +124,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.KEY = exports.BASE_URL = void 0;
-var KEY = "40b745c14eadad7b7c4e6e4bf3b70103";
+var KEY = "5f472b7acba333cd8a035ea85a0d4d4c";
 exports.KEY = KEY;
 var BASE_URL = "https://api.openweathermap.org/data/2.5";
 exports.BASE_URL = BASE_URL;
@@ -4579,6 +4579,13 @@ var formatDate = function formatDate() {
   var hours = (date.getHours() < 10 ? "0" : "") + date.getHours();
   var minutes = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
   return "".concat(day, ", ").concat(hours, ":").concat(minutes);
+};
+
+var formatDay = function formatDay(timestamp) {
+  var date = new Date(timestamp * 1000);
+  var day = date.getDay();
+  var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  return days[day];
 }; //get API data
 
 
@@ -4605,20 +4612,28 @@ var currentPosition = navigator.geolocation.getCurrentPosition(setCoordinates);
 var getWeatherData = function getWeatherData() {
   var URL = "".concat(_constants.BASE_URL, "/weather?lat=").concat(latitude, "&lon=").concat(longitude, "&appid=").concat(_constants.KEY, "&units=").concat(units);
   axios.get(URL).then(showCityWheather);
-}; //TODO display weather + refact
+};
+
+var getForecastData = function getForecastData(coordinates) {
+  var URL = "".concat(_constants.BASE_URL, "/onecall?lat=").concat(coordinates.lat, "&lon=").concat(coordinates.lon, "&appid=").concat(_constants.KEY, "&units=").concat(units);
+  axios.get(URL).then(displayForecast);
+}; //display weather
 
 
 var header = document.querySelector(".card__header-location");
 var searchInputData = document.getElementById("search");
 var searchForm = document.getElementById("search-form");
-var convertedTemperature;
 var weatherStatusElement = document.querySelector(".status");
-/* const weatherDescriptionElement = document.querySelector(".weather__description"); */
-
 var weatherWindElement = document.querySelector(".weather__wind");
 var humidityElement = document.getElementById("humidity");
 var iconElement = document.getElementById("icon");
 var currentHeading = document.querySelector(".heading");
+var temperatureElement = document.getElementById("temperature");
+var celsius = document.getElementById("celsius");
+var fahrenheit = document.getElementById("fahrenheit");
+var currentLocationBtn = document.getElementById("localisation-btn");
+var forecastContainer = document.getElementById("forecast");
+var convertedTemperature;
 
 var showCityWheather = function showCityWheather(response) {
   var _response$data = response.data,
@@ -4632,14 +4647,12 @@ var showCityWheather = function showCityWheather(response) {
       temperature = _response$data$main.temp,
       humidity = _response$data$main.humidity,
       windSpeed = _response$data.wind.speed,
-      _response$data$coord = _response$data.coord,
-      longitude = _response$data$coord.lon,
-      latitude = _response$data$coord.lat;
+      coordinates = _response$data.coord;
 
   convertedTemperature = Math.round(temperature); //display
 
-  header.textContent = cityName;
-  currentHeading.textContent = formatDate(); //*
+  header.textContent = formatDate();
+  currentHeading.textContent = "".concat(cityName, " today:"); //*
 
   iconElement.setAttribute("src", "http://openweathermap.org/img/wn/".concat(iconId, "@2x.png"));
   iconElement.setAttribute("alt", weatherDescription);
@@ -4647,12 +4660,10 @@ var showCityWheather = function showCityWheather(response) {
   temperatureElement.textContent = "".concat(Math.round(temperature));
   weatherWindElement.textContent = "Wind speed: ".concat(windSpeed, " m/sec");
   humidityElement.textContent = "Humidity: ".concat(humidity, " %");
-}; //TODO refact unit conversion
+  getForecastData(coordinates);
+}; //unit conversion
 
 
-var temperatureElement = document.getElementById("temperature");
-var celsius = document.getElementById("celsius");
-var fahrenheit = document.getElementById("fahrenheit");
 celsius.addEventListener("click", function (event) {
   event.preventDefault();
   var celsiusTemp = Math.round(convertedTemperature);
@@ -4668,9 +4679,13 @@ fahrenheit.addEventListener("click", function (event) {
   celsius.classList.remove("active");
 }); //local weather
 
-var currentLocationBtn = document.getElementById("localisation-btn");
 currentLocationBtn.addEventListener("click", function (event) {
   event.preventDefault();
+
+  while (forecastContainer.firstChild) {
+    forecastContainer.removeChild(forecastContainer.firstChild);
+  }
+
   getWeatherData();
 }); //form handler
 
@@ -4684,7 +4699,25 @@ var formHandler = function formHandler(form) {
       return;
     }
 
+    while (forecastContainer.firstChild) {
+      forecastContainer.removeChild(forecastContainer.firstChild);
+    }
+
     search(searchInputData.value);
+  });
+}; //forecast
+
+
+var displayForecast = function displayForecast(response) {
+  var forecast = response.data.daily;
+  forecast.forEach(function (day, index) {
+    var forecastElement = document.createElement("div");
+    forecastElement.setAttribute("class", "day");
+
+    if (index < 6) {
+      forecastElement.innerHTML = "\n      <p class=\"day__title\">".concat(formatDay(day.dt), "</p>\n      <img class=\"day__icon\" src=\"http://openweathermap.org/img/wn/").concat(day.weather[0].icon, "@2x.png\"\n      alt=\"").concat(day.weather[0].description, "\"/>\n    <p class=\"status\">\n    ").concat(day.weather[0].main, "\n    </p>\n    <p class=\"day-details\">\n      <span class=\"day-details_max\">\n      ").concat(Math.round(day.temp.max), "\xBA\n      </span>\n      <span class=\"day-details_min\">\n      ").concat(Math.round(day.temp.min), "\xBA\n      </span>\n    </p>\n    ");
+      forecastContainer.appendChild(forecastElement);
+    }
   });
 };
 

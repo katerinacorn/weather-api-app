@@ -19,8 +19,8 @@
         <form id="search-form" class="card__header-search">
           <input class="form-control search-iput" type="search" name="search" id="search"
             placeholder="Type a city..." />
-          <input id="search-btn" class="btn btn-primary" type="submit" value="Search" />
-          <button id="localisation-btn" type="button" class="btn btn-outline-danger">Current</button>
+          <input id="search-btn" class="btn btn-primary search-btn" type="submit" value="Search" />
+          <button id="localisation-btn" type="button" class="btn btn-primary localisation-btn">Current</button>
         </form>
       </header>
 
@@ -40,81 +40,13 @@
             <p id="humidity"></p>
           </div>
         </div>
-        <div class="card__content-forecast">
-          <div class="line">
-            <div class="day">
-              <h4 class="heading">
-                mon
-              </h4>
-              <span class="emoji">
-                ☀️
-              </span>
-              <p class="status">sunny</p>
-              <strong>23º</strong>
-            </div>
-            <div class="day">
-              <h4 class="heading">
-                tue
-              </h4>
-              <span class="emoji">
-                ☀️
-              </span>
-              <p class="status">sunny</p>
-              <strong>25º</strong>
-            </div>
-            <div class="day">
-              <h4 class="heading">
-                wed
-              </h4>
-              <span class="emoji">
-                ☁️
-              </span>
-              <p class="status">cloudy</p>
-              <strong>15º</strong>
-            </div>
-          </div>
-          <div class="line">
-            <div class="day">
-              <h4 class="heading">
-                thu
-              </h4>
-              <span class="emoji">
-                ⛈️
-              </span>
-              <p class="status">rainy</p>
-              <strong>12º</strong>
-            </div>
-            <div class="day">
-              <h4 class="heading">
-                fri
-              </h4>
-              <span class="emoji">
-                ⛈️
-              </span>
-              <p class="status">rainy</p>
-              <strong>5º</strong>
-            </div>
-            <div class="day">
-              <h4 class="heading">
-                sat
-              </h4>
-              <span class="emoji">
-                ⛈️
-              </span>
-              <p class="status">rainy</p>
-              <strong>10º</strong>
-            </div>
-          </div>
-        </div>
+        <div id="forecast" class="card__content-forecast"></div>
       </section>
-      <ul id="list">
-
-      </ul>
 
       <footer class="card__footer">
         <p class="card__footer-content">
           This project is
-          <a href="https://github.com/katerinacorn/weather-api-app" class="card__footer-link">
+          <a href="https://github.com/katerinacorn/weather-api-app" class="card__footer-link" target="_blank">
             open-sourced on GitHub.
           </a>
         </p>
