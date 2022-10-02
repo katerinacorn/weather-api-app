@@ -1,0 +1,145 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+
+  background-color: #ebec75;
+  background-repeat: no-repeat;
+  object-fit: cover;
+  background-image: radial-gradient(
+      at 47% 33%,
+      hsl(232.64, 68%, 50%) 0,
+      transparent 59%
+    ),
+    radial-gradient(at 82% 65%, hsl(149.7, 59%, 67%) 0, transparent 55%);
+}
+
+.card {
+  background-color: transparent;
+  max-width: 900px;
+  width: 100%;
+  margin: 50px auto;
+  border: 0;
+  padding: 0 20px;
+}
+
+.card__header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.card__header-emoji {
+  font-size: 25px;
+}
+.card__header-location,
+.card__header-search {
+  width: 100%;
+}
+.card__header-location {
+  font-size: 36px;
+  padding: 5px;
+  font-weight: 500;
+  margin-right: 20px;
+}
+.card__header-search {
+  display: flex;
+}
+.form-control {
+  margin-right: 5px;
+  min-width: 130px;
+}
+
+.card__content {
+  display: flex;
+  width: 100%;
+}
+.card__content-current,
+.card__content-forecast,
+.day {
+  width: 100%;
+  border-radius: 10px;
+  text-align: center;
+}
+.card__content-current {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  flex: 0 1 auto;
+  font-size: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__content-current,
+.day {
+  backdrop-filter: blur(3px) saturate(178%);
+  -webkit-backdrop-filter: blur(3px) saturate(178%);
+  background-color: rgba(195, 243, 237, 0.34);
+  border-radius: 12px;
+  border: 1px solid rgba(209, 213, 219, 0.3);
+}
+.card__content-forecast {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0 15px;
+  width: 100%;
+  padding: 0;
+  font-size: 22px;
+}
+.line {
+  width: 100%;
+  display: flex;
+}
+.day {
+  flex: 0 1 auto;
+  padding: 10px;
+  margin: 10px;
+}
+.emoji {
+  margin: 15px;
+}
+.card__content-forecast .emoji {
+  font-size: 40px;
+}
+.day .status {
+  font-size: 14px;
+  padding: 10px;
+}
+.card__content-current .emoji {
+  font-size: 80px;
+}
+
+.status {
+  background-color: rgb(46, 53, 145);
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 25px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.temperature__link,
+.temperature__link:hover {
+  text-decoration: none;
+}
+.temperature__link {
+  color: #5f59b648;
+}
+.active {
+  color: rgb(17, 12, 87);
+}
+
+.btn {
+  margin-right: 5px;
+}
+
+.card__content-forecast{
+  filter: blur(5px);
+}
+
+
+/*# sourceMappingURL=/main.1e43358e.css.map */
