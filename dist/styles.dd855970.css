@@ -13,6 +13,10 @@ body {
   background: radial-gradient(circle, rgba(214,4,61,0.8224911971830986) 6%, rgba(212,20,112,0.8871794871794871) 21%, rgba(188,88,208,0.8224911971830986) 59%, rgba(255,255,255,0.9435897435897436) 100%);
 }
 
+a, a:hover{
+  text-decoration: none;
+}
+
 .card {
   background-color: transparent;
   max-width: 900px;
@@ -159,6 +163,13 @@ color: rgb(186, 25, 201); */
 
 .card__content-forecast{
   filter: blur(5px);
+}
+
+.card__footer{
+
+}
+.card__footer-link{
+
 }
 
 
